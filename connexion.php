@@ -27,8 +27,8 @@ mysqli_set_charset($db, "utf8");
 <?php
 if(!empty($_GET['username']) && !empty($_GET['password']))
 {
-    $username = $_GET['username'];
-    $password = $_GET['password'];
+    $username = mysqli_real_escape_string($db, $_GET['username']);
+    $password = mysqli_real_escape_string($db, $_GET['password']);
     $query = "SELECT id, username FROM users WHERE username = '".$username."' AND password = '".$password."'";
     $rs = mysqli_query($db, $query);
     if(mysqli_num_rows($rs) == 1)
