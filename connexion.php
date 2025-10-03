@@ -27,17 +27,18 @@ mysqli_set_charset($db, "utf8");
 <?php
 if(!empty($_GET['username']) && !empty($_GET['password']))
 {
-    $username = mysqli_real_escape_string($db, $_GET['username']);
-    $password = mysqli_real_escape_string($db, $_GET['password']);
-    $query = "SELECT id, username FROM users WHERE username = '".$username."' AND password = '".$password."'";
-    $rs = mysqli_query($db, $query);
-    if(mysqli_num_rows($rs) == 1)
-    {
+    $username = mysqli_real_escape_string($db, $_GET['username']); // Mettre des "\" pour pouvoir insérer tous les caractères comme des chaînes de caractère, comme les caractères pour les commentaires sans créer des commentaires
+    $password = mysqli_real_escape_string($db, $_GET['password']); // Mettre des "\" pour pouvoir insérer tous les caractères comme des chaînes de caractère, comme les caractères pour les commentaires sans créer des commentaires
+    $p_query = $db->prepare("SELECT id, username FROM users WHERE username = ? AND password = ?");
+    $p_query->bind_param("ss", $username, $password); // Lier les variables avec les "?", le ss c'est pour dire que c'est des string
+    $p_query->execute();
+    $p_query->store_result();
+    // $rs = mysqli_query($db, $p_query);
+    if($p_query->num_rows == 1) {
         $user = mysqli_fetch_assoc($rs);
         echo "Bienvenue ".htmlspecialchars($user['username']);
     }
-    else
-    {
+    else {
         echo "Mauvais nom d'utilisateur et/ou mot de passe !";
     }
     mysqli_free_result($rs);
