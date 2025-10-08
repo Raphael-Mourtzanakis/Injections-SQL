@@ -35,14 +35,15 @@ if(!empty($_GET['username']) && !empty($_GET['password']))
     $p_query->store_result();
     // $rs = mysqli_query($db, $p_query);
     if($p_query->num_rows == 1) {
-        $user = mysqli_fetch_assoc($rs);
-        echo "Bienvenue ".htmlspecialchars($user['username']);
+        $p_query->bind_result($id, $username);
+        $p_query->fetch();
+        echo "Bienvenue ".htmlspecialchars($username);
     }
     else {
         echo "Mauvais nom d'utilisateur et/ou mot de passe !";
     }
-    mysqli_free_result($rs);
-    mysqli_close($db);
+    $p_query->close();
+    $db->close();
 }
 ?>
 <form action="connexion.php" method="GET">
