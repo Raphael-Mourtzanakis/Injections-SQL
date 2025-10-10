@@ -17,17 +17,15 @@ mysqli_set_charset($db, "utf8");
 if(ctype_digit($_GET['category'])) // Vérifier si chaque caractère dans la valeur de category est un chiffre
 {
     $category = mysqli_real_escape_string($db, $_GET['category']);
-    $query = "SELECT id, title, DATE_FORMAT(date, '%d/%m/%Y') AS date FROM articles WHERE category_id = \"".$category."\"";
-    $rs_articles = mysqli_query($db, $query);
-    echo "<u>\n";
-    if(mysqli_num_rows($rs_articles) > 0)
-    {
-        while($r = mysqli_fetch_assoc($rs_articles))
+    $p_query = $db->prepare("SELECT id, title, DATE_FORMAT(date, '%d/%m/%Y') AS date FROM articles WHERE category_id = ?");
+    $p_query->bind_param('id','category');
+    $p_query->execute();
+         
+    $p_query->bind_result($id, $title, $date);
+    while($p_query->fetch())
         {
-            echo "<li><a href=\"#\">".htmlspecialchars($r['title'])." - ".$r['date']."</a></li>\n";
+            echo "<li><a href=\"#\">".$id." ".$title." ".$date."</a></li><br>";
         }
-    }
-    echo "</u>\n";
 }
 ?>
 </body>
