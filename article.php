@@ -14,10 +14,10 @@ mysqli_set_charset($db, "utf8");
 </head>
 <body>
 <?php
-if(ctype_digit($_GET['category'])) // Vérifier si chaque caractère dans la valeur de category est un nombre
+if(ctype_digit($_GET['category'])) // Vérifier si chaque caractère dans la valeur de category est un chiffre
 {
     $category = mysqli_real_escape_string($db, $_GET['category']);
-    $query = "SELECT id, title, DATE_FORMAT(date, '%d/%m/%Y') AS date FROM articles WHERE category_id = ".$category;
+    $query = "SELECT id, title, DATE_FORMAT(date, '%d/%m/%Y') AS date FROM articles WHERE category_id = \"".$category."\"";
     $rs_articles = mysqli_query($db, $query);
     echo "<u>\n";
     if(mysqli_num_rows($rs_articles) > 0)
