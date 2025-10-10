@@ -14,7 +14,7 @@ mysqli_set_charset($db, "utf8");
 </head>
 <body>
 <?php
-if(!empty($_GET['category']))
+if(ctype_digit($_GET['category'])) // Vérifier si chaque caractère dans la valeur de category est un nombre
 {
     $category = mysqli_real_escape_string($db, $_GET['category']);
     $query = "SELECT id, title, DATE_FORMAT(date, '%d/%m/%Y') AS date FROM articles WHERE category_id = ".$category;
