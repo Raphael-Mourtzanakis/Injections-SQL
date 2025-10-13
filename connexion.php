@@ -29,11 +29,11 @@
 			{
 				$username = mysqli_real_escape_string($db, $_GET['username']); // Mettre des "\" pour pouvoir insérer tous les caractères comme des chaînes de caractère, comme les caractères pour les commentaires sans créer des commentaires
 				$password = mysqli_real_escape_string($db, $_GET['password']); // Mettre des "\" pour pouvoir insérer tous les caractères comme des chaînes de caractère, comme les caractères pour les commentaires sans créer des commentaires
+				$password = hash("md2",$password); // Hasher le mot de passe
 				$p_query = $db->prepare("SELECT id, username FROM users WHERE username = ? AND password = ?");
 				$p_query->bind_param("ss", $username, $password); // Lier les variables avec les "?", le ss c'est pour dire que c'est des string
 				$p_query->execute();
 				$p_query->store_result();
-				// $rs = mysqli_query($db, $p_query);
 				if ($p_query->num_rows == 1) {
 					$p_query->bind_result($id, $username);
 					$p_query->fetch();
